@@ -165,7 +165,10 @@ public class UI {
                         clientController.removeClient(id);
                     }
                     case "4" -> {
-                        // to be implemented
+                        this.clientController.spentMoneyReport()
+                                .forEach(c -> {
+                                    System.out.println(c.toString());
+                                });
                     }
                     case "5" -> {
                         clientController.getClientRepository().getClients()

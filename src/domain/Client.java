@@ -40,6 +40,13 @@ public class Client {
         return id;
     }
 
+    public Float getSpentMoney() {
+        return this.boughtBooks
+                .stream()
+                .map(Book::getPrice)
+                .reduce(0F, Float::sum);
+    }
+
     // -- SETTERS --
     public void setName(String name) {
         this.name = name;

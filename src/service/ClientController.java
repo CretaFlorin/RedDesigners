@@ -4,7 +4,10 @@ import domain.Book;
 import domain.Client;
 import repository.ClientRepository;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ClientController {
     ClientRepository clientRepository;
@@ -37,4 +40,12 @@ public class ClientController {
     public void buyBook(Integer clientId, Book book) {
         this.clientRepository.getEntityById(clientId).getBoughtBooks().add(book);
     }
+
+    public ArrayList<Client> spentMoneyReport() {
+        return this.clientRepository.getClients()
+                .stream()
+                .sorted(Comparator.comparing(Client::getSpentMoney).reversed())
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
 }
