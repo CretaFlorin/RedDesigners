@@ -1,28 +1,14 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Client {
-    private static final AtomicInteger count = new AtomicInteger(0);
-    Integer id;
+public class Client extends BaseEntity<Long>{
     String name;
     ArrayList<Book> boughtBooks;
 
     public Client(String name) {
-        this.id = count.incrementAndGet();
-        this.name = name;
-        this.boughtBooks = new ArrayList<>();
-    }
-
-    public Client(String name, ArrayList<Book> boughtBooks) {
-        this.id = count.incrementAndGet();
-        this.name = name;
-        this.boughtBooks = boughtBooks;
-    }
-
-    public Client(Integer id, String name) {
-        this.id = id;
         this.name = name;
         this.boughtBooks = new ArrayList<>();
     }
@@ -36,15 +22,12 @@ public class Client {
         return boughtBooks;
     }
 
-    public Integer getId() {
-        return id;
-    }
 
-    public Float getSpentMoney() {
+    public Double getSpentMoney() {
         return this.boughtBooks
                 .stream()
                 .map(Book::getPrice)
-                .reduce(0F, Float::sum);
+                .reduce(0D, Double::sum);
     }
 
     // -- SETTERS --
@@ -56,10 +39,22 @@ public class Client {
         this.boughtBooks = boughtBooks;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Client client = (Client) o;
+
+        if (!Objects.equals(this.name, client.getName())) return false;
+        return this.boughtBooks.equals(client.getBoughtBooks());
+    }
+
     @Override
     public String toString() {
         return "Client{" +
-                "id=" + id +
+                "id=" + this.getId() +
                 ", name='" + name + '\'' +
                 ", boughtBooks=" + boughtBooks.toString() +
                 '}';

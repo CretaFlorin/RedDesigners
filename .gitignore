@@ -23,7 +23,11 @@ MANIFEST.MF
 
 #gradle
 gradle
-.gradle
+gradle.*
+gradlew
+gradlew.*
+*.gradle
+
 
 #angular
 node_modules
