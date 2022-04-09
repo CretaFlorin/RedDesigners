@@ -1,6 +1,6 @@
 package repository;
 
-import domain.Book;
+import domain.Client;
 import domain.validators.Validator;
 import domain.validators.ValidatorException;
 
@@ -10,17 +10,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * @author radu.
- */
-public class BookFileRepository extends InMemoryRepository<Long, Book> {
+public class ClientFileRepository extends InMemoryRepository<Long, Client> {
     private final String fileName;
 
-    public BookFileRepository(Validator<Book> validator, String fileName) {
+    public ClientFileRepository(Validator<Client> validator, String fileName) {
         super(validator);
         this.fileName = fileName;
 
@@ -36,14 +34,21 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
 
                 Long id = Long.valueOf(items.get(0));
                 String name = items.get(1);
-                String author = items.get(2);
-                Double price = Double.parseDouble(items.get((3)));
+                String boughtBooks_str = items.get(2);
 
-                Book book = new Book(name, author, price);
-                book.setId(id);
+
+                List<Long> boughtBooks = Arrays.stream(boughtBooks_str.split("-")).toList()
+                        .stream()
+                        .map(Long::parseLong)
+                        .toList();
+
+
+                Client client = new Client(name);
+                client.setBoughtBooks(new ArrayList<Long>(boughtBooks));
+                client.setId(id);
 
                 try {
-                    super.save(book);
+                    super.save(client);
                 } catch (ValidatorException e) {
                     e.printStackTrace();
                 }
@@ -54,23 +59,28 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
     }
 
     @Override
-    public Optional<Book> save(Book book) throws ValidatorException {
-        Optional<Book> optional = super.save(book);
+    public Optional<Client> save(Client client) throws ValidatorException {
+        Optional<Client> optional = super.save(client);
         if (optional.isPresent()) {
             return optional;
         }
-        saveToFile(book);
+        saveToFile(client);
         return Optional.empty();
     }
 
-    private void saveToFile(Book entity) {
+    private void saveToFile(Client entity) {
         Path path = Paths.get(fileName);
 
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
-            bufferedWriter.write(entity.getId() + "," + entity.getName() + "," + entity.getAuthor() + "," + entity.getPrice());
+            bufferedWriter.write(entity.getId() + "," + entity.getName() + ",");
+            for (int i = 0; i < entity.getBoughtBooks().size() - 1; i++)
+                bufferedWriter.write(entity.getBoughtBooks().get(i).toString() + "-");
+            bufferedWriter.write(entity.getBoughtBooks().get(Math.toIntExact(entity.getBoughtBooks().get(entity.getBoughtBooks().size() - 1))).toString());
             bufferedWriter.newLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
+
+

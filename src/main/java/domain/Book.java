@@ -1,8 +1,5 @@
 package domain;
 
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class Book extends BaseEntity<Long> {
     String name;
     String author;
@@ -19,21 +16,21 @@ public class Book extends BaseEntity<Long> {
         return name;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
     // -- SETTERS --
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public Double getPrice() {
+        return price;
     }
 
     public void setPrice(Double price) {
@@ -54,11 +51,6 @@ public class Book extends BaseEntity<Long> {
 
     @Override
     public String toString() {
-        return "Book{" +
-                "id=" + this.getId() +
-                ", name='" + this.name + '\'' +
-                ", author='" + this.author + '\'' +
-                ", price=" + this.price +
-                '}';
+        return "Book{" + "id=" + this.getId() + ", name='" + this.name + '\'' + ", author='" + this.author + '\'' + ", price=" + this.price + '}';
     }
 }

@@ -2,11 +2,10 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class Client extends BaseEntity<Long>{
+public class Client extends BaseEntity<Long> {
     String name;
-    ArrayList<Book> boughtBooks;
+    ArrayList<Long> boughtBooks;
 
     public Client(String name) {
         this.name = name;
@@ -18,24 +17,21 @@ public class Client extends BaseEntity<Long>{
         return name;
     }
 
-    public ArrayList<Book> getBoughtBooks() {
-        return boughtBooks;
-    }
-
-
-    public Double getSpentMoney() {
-        return this.boughtBooks
-                .stream()
-                .map(Book::getPrice)
-                .reduce(0D, Double::sum);
-    }
-
     // -- SETTERS --
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setBoughtBooks(ArrayList<Book> boughtBooks) {
+
+//    public Double getSpentMoney() {
+//        return this.boughtBooks.stream().map(Book::getPrice).reduce(0D, Double::sum);
+//    }
+
+    public ArrayList<Long> getBoughtBooks() {
+        return boughtBooks;
+    }
+
+    public void setBoughtBooks(ArrayList<Long> boughtBooks) {
         this.boughtBooks = boughtBooks;
     }
 
@@ -53,10 +49,6 @@ public class Client extends BaseEntity<Long>{
 
     @Override
     public String toString() {
-        return "Client{" +
-                "id=" + this.getId() +
-                ", name='" + name + '\'' +
-                ", boughtBooks=" + boughtBooks.toString() +
-                '}';
+        return "Client{" + "id=" + this.getId() + ", name='" + name + '\'' + ", boughtBooks=" + boughtBooks.toString() + '}';
     }
 }

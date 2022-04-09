@@ -4,6 +4,8 @@ import domain.Book;
 import domain.validators.ValidatorException;
 import repository.Repository;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,11 +23,25 @@ public class BookService {
         repository.save(book);
     }
 
+    public void updateBook(Book newBook) {
+        repository.update(newBook);
+    }
+
+    public void removeBook(Long bookId) {
+        repository.delete(bookId);
+    }
+
+
     public Set<Book> getAllBooks() {
         Iterable<Book> books = repository.findAll();
         return StreamSupport.stream(books.spliterator(), false).collect(Collectors.toSet());
     }
 
+    public ArrayList<Book> filterByPrice(Double min, Double max) {
+        return new ArrayList<Book>((Collection<? extends Book>) this.repository.findAll())
+                .stream()
+                .filter(b -> b.getPrice() >= min && b.getPrice() <= max).collect(Collectors.toCollection(ArrayList::new));
+    }
 
     public Set<Book> filterBooksByName(String s) {
         Iterable<Book> Books = repository.findAll();
@@ -40,4 +56,6 @@ public class BookService {
 
         return filteredBooks;
     }
+
+
 }

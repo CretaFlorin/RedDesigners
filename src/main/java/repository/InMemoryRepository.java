@@ -1,17 +1,12 @@
 package repository;
 
-
-
 import domain.BaseEntity;
 import domain.validators.Validator;
 import domain.validators.ValidatorException;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-/**
- * @author radu.
- */
+
 public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Repository<ID, T> {
     private final Map<ID, T> entities;
     private final Validator<T> validator;
