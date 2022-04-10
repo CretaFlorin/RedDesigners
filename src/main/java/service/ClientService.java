@@ -1,14 +1,12 @@
 package service;
 
-import domain.Book;
 import domain.Client;
 import domain.validators.ValidatorException;
 import repository.InMemoryRepository;
 import repository.Repository;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -24,36 +22,45 @@ public class ClientService {
         repository.save(client);
     }
 
-    public Set<Client> getAllClients() {
-        Iterable<Client> clients = repository.findAll();
-        return StreamSupport.stream(clients.spliterator(), false).collect(Collectors.toSet());
+    public void updateClient(Client newClient) {
+        repository.update(newClient);
     }
 
+    public void removeClient(Long clientId) {
+        repository.delete(clientId);
+    }
 
-    public Set<Client> filterClientsByName(String s) {
-        Iterable<Client> clients = repository.findAll();
-        //version 1
-//        Set<Client> filteredClients = StreamSupport.stream(Clients.spliterator(), false)
-//                .filter(Client -> Client.getName().contains(s)).collect(Collectors.toSet());
+    public Client getClientById(Long clientId) {
+        return this.repository.findOne(clientId)
+                .stream()
+                .findFirst().orElse(null);
+    }
 
-        //version 2
-        Set<Client> filteredClients = new HashSet<>();
-        clients.forEach(filteredClients::add);
-        filteredClients.removeIf(Client -> !Client.getName().contains(s));
+    public Set<Client> getAllClients() {
+        return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toSet());
+    }
 
-        return filteredClients;
+    public List<Map.Entry<Long, Double>> spentMoneyReport(Map<Long, Double> prices) {
+        return this.getAllClients()
+                .stream()
+                .collect(Collectors.toMap(
+                                Client::getId,
+                                client -> {
+                                    return client.getBoughtBooks()
+                                            .stream()
+                                            .map(prices::get)
+                                            .reduce(0D, Double::sum);
+                                }
+                        )
+                )
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.<Long, Double>comparingByValue().reversed())
+                .collect(Collectors.toList());
     }
 
     public void buyBook(Long clientId, Long bookId) {
-        System.out.println(this.repository.findOne(clientId).getClass());
+        this.getClientById(clientId).buyBook(bookId);
     }
-
-//    public ArrayList<Client> spentMoneyReport() {
-//        return this.repository.findAll()
-//                .stream()
-//                .sorted(Comparator.comparing(Client::getSpentMoney).reversed())
-//                .collect(Collectors.toCollection(ArrayList::new));
-//    }
-
 
 }

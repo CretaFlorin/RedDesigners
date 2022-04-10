@@ -35,6 +35,9 @@ public class Client extends BaseEntity<Long> {
         this.boughtBooks = boughtBooks;
     }
 
+    public void buyBook(Long bookId) {
+        this.boughtBooks.add(bookId);
+    }
 
     @Override
     public boolean equals(Object o) {

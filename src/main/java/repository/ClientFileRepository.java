@@ -73,11 +73,11 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
         Path path = Paths.get(fileName);
 
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
+            bufferedWriter.newLine();
             bufferedWriter.write(entity.getId() + "," + entity.getName() + ",");
             for (int i = 0; i < entity.getBoughtBooks().size() - 1; i++)
                 bufferedWriter.write(entity.getBoughtBooks().get(i).toString() + "-");
             bufferedWriter.write(entity.getBoughtBooks().get(Math.toIntExact(entity.getBoughtBooks().get(entity.getBoughtBooks().size() - 1))).toString());
-            bufferedWriter.newLine();
         } catch (IOException e) {
             e.printStackTrace();
         }

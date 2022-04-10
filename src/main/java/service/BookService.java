@@ -1,13 +1,11 @@
 package service;
 
 import domain.Book;
+import domain.Client;
 import domain.validators.ValidatorException;
 import repository.Repository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -41,6 +39,20 @@ public class BookService {
         return new ArrayList<Book>((Collection<? extends Book>) this.repository.findAll())
                 .stream()
                 .filter(b -> b.getPrice() >= min && b.getPrice() <= max).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public List<Map.Entry<Long, Integer>> bestSellersList(Set<Client> clients) {
+        HashMap<Long, Integer> booksFr = new HashMap<>();
+        clients.forEach(c -> {
+            c.getBoughtBooks().forEach(bookId -> {
+                int count = booksFr.getOrDefault(bookId, 0);
+                booksFr.put(bookId, count + 1);
+            });
+        });
+        return booksFr.entrySet()
+                        .stream()
+                        .sorted((e1, e2) -> Integer.compare(e1.getValue(), e2.getValue()))
+                        .toList();
     }
 
     public Set<Book> filterBooksByName(String s) {
