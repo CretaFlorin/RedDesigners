@@ -61,11 +61,9 @@ public class BookService {
 
     public Set<Book> filterBooksByName(String s) {
         Iterable<Book> Books = repository.findAll();
-
         Set<Book> filteredBooks = new HashSet<>();
         Books.forEach(filteredBooks::add);
         filteredBooks.removeIf(Book -> !Book.getName().contains(s));
-
         return filteredBooks;
     }
 
