@@ -40,27 +40,22 @@ public class ClientService {
         return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toSet());
     }
 
-    public List<Map.Entry<Long, Double>> spentMoneyReport(Map<Long, Double> prices) {
-        return this.getAllClients()
-                .stream()
-                .collect(Collectors.toMap(
-                                Client::getId,
-                                client -> {
-                                    return client.getBoughtBooks()
-                                            .stream()
-                                            .map(prices::get)
-                                            .reduce(0D, Double::sum);
-                                }
-                        )
-                )
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.<Long, Double>comparingByValue().reversed())
-                .collect(Collectors.toList());
-    }
-
-    public void buyBook(Long clientId, Long bookId) {
-        this.getClientById(clientId).buyBook(bookId);
-    }
-
+//    public List<Map.Entry<Long, Double>> spentMoneyReport(Map<Long, Double> prices) {
+//        return this.getAllClients()
+//                .stream()
+//                .collect(Collectors.toMap(
+//                                Client::getId,
+//                                client -> {
+//                                    return client.getBoughtBooks()
+//                                            .stream()
+//                                            .map(prices::get)
+//                                            .reduce(0D, Double::sum);
+//                                }
+//                        )
+//                )
+//                .entrySet()
+//                .stream()
+//                .sorted(Map.Entry.<Long, Double>comparingByValue().reversed())
+//                .collect(Collectors.toList());
+//    }
 }

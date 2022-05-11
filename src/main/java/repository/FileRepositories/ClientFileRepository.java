@@ -1,9 +1,9 @@
-package repository;
+package repository.FileRepositories;
 
 import domain.Client;
 import domain.validators.Validator;
 import domain.validators.ValidatorException;
-
+import repository.InMemoryRepository;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -11,11 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ClientFileRepository extends InMemoryRepository<Long, Client> {
     private final String fileName;
@@ -36,17 +34,8 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
 
                 Long id = Long.valueOf(items.get(0));
                 String name = items.get(1);
-                String boughtBooks_str = items.get(2);
-
-
-                List<Long> boughtBooks = Arrays.stream(boughtBooks_str.split("-")).collect(Collectors.toList())
-                        .stream()
-                        .map(Long::parseLong)
-                        .collect(Collectors.toList());
-
 
                 Client client = new Client(name);
-                client.setBoughtBooks(new ArrayList<Long>(boughtBooks));
                 client.setId(id);
 
                 try {
@@ -75,10 +64,7 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
 
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
             bufferedWriter.newLine();
-            bufferedWriter.write(entity.getId() + "," + entity.getName() + ",");
-            for (int i = 0; i < entity.getBoughtBooks().size() - 1; i++)
-                bufferedWriter.write(entity.getBoughtBooks().get(i).toString() + "-");
-            bufferedWriter.write(entity.getBoughtBooks().get(Math.toIntExact(entity.getBoughtBooks().get(entity.getBoughtBooks().size() - 1))).toString());
+            bufferedWriter.write(entity.getId() + "," + entity.getName());
         } catch (IOException e) {
             e.printStackTrace();
         }

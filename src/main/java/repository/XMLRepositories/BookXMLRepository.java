@@ -1,8 +1,12 @@
-package repository;
+package repository.XMLRepositories;
 
 import domain.Book;
 import domain.validators.Validator;
 import domain.validators.ValidatorException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import repository.InMemoryRepository;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -14,17 +18,51 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * @author radu.
- */
-public class BookFileRepository extends InMemoryRepository<Long, Book> {
+public class BookXMLRepository extends InMemoryRepository<Long, Book> {
     private final String fileName;
 
-    public BookFileRepository(Validator<Book> validator, String fileName) {
+    public BookXMLRepository(Validator<Book> validator, String fileName) {
         super(validator);
         this.fileName = fileName;
 
-        loadData();
+        this.loadData();
+    }
+
+    public Book extractEntity(Element element) {
+        String id = element.getAttribute("id");
+        NodeList nods = element.getChildNodes();
+        String name = element.getElementsByTagName("name")
+                .item(0)
+                .getTextContent();
+        String author = element.getElementsByTagName("author")
+                .item(0)
+                .getTextContent();
+        String price = element.getElementsByTagName("price")
+                .item(0)
+                .getTextContent();
+
+        Book book = new Book(name, author, Double.parseDouble(price));
+        book.setId(Long.parseLong(id));
+        return book;
+    }
+
+    public Element createElementFromEntity(Document document, Book book) {
+        Element e = document.createElement("Book");
+        e.setAttribute("id", book.getId().toString());
+
+        Element name = document.createElement("name");
+        name.setTextContent(book.getName());
+        e.appendChild(name);
+
+        Element author = document.createElement("author");
+        author.setTextContent(book.getAuthor());
+        e.appendChild(author);
+
+        Element price = document.createElement("price");
+        price.setTextContent(book.getPrice().toString());
+        e.appendChild(price);
+
+        return e;
     }
 
     private void loadData() {
@@ -73,4 +111,5 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
             e.printStackTrace();
         }
     }
+
 }
