@@ -190,7 +190,6 @@ public class UI {
         String author = scanner.nextLine();
         System.out.println("Price: ");
         Double price = Double.parseDouble(scanner.nextLine());
-
         Book book = new Book(name, author, price);
         book.setId(id);
         return book;
