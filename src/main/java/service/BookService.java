@@ -52,7 +52,7 @@ public class BookService {
         return booksFr.entrySet()
                         .stream()
                         .sorted((e1, e2) -> Integer.compare(e1.getValue(), e2.getValue()))
-                        .toList();
+                        .collect(Collectors.toList());
     }
 
     public Set<Book> filterBooksByName(String s) {

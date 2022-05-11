@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ClientFileRepository extends InMemoryRepository<Long, Client> {
     private final String fileName;
@@ -38,10 +39,10 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
                 String boughtBooks_str = items.get(2);
 
 
-                List<Long> boughtBooks = Arrays.stream(boughtBooks_str.split("-")).toList()
+                List<Long> boughtBooks = Arrays.stream(boughtBooks_str.split("-")).collect(Collectors.toList())
                         .stream()
                         .map(Long::parseLong)
-                        .toList();
+                        .collect(Collectors.toList());
 
 
                 Client client = new Client(name);

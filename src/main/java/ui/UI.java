@@ -21,9 +21,9 @@ public class UI {
     BookValidator bookValidator = new BookValidator();
     ClientValidator clientValidator = new ClientValidator();
 
-    BookFileRepository bookRepository = new BookFileRepository(bookValidator, "C:\\Users\\creta\\Desktop\\SDI\\BookStore\\src\\main\\files\\books.txt");
+    BookFileRepository bookRepository = new BookFileRepository(bookValidator, "src\\main\\files\\books.txt");
     BookService bookController = new BookService(bookRepository);
-    ClientFileRepository clientRepository = new ClientFileRepository(clientValidator, "C:\\Users\\creta\\Desktop\\SDI\\BookStore\\src\\main\\files\\clients.txt");
+    ClientFileRepository clientRepository = new ClientFileRepository(clientValidator, "src\\main\\files\\clients.txt");
     ClientService clientController = new ClientService(clientRepository);
 
     public UI() {
@@ -40,14 +40,14 @@ public class UI {
 
     public void printCommands() {
         switch (this.commandLayer) {
-            case "App" -> {
+            case "App" : {
                 System.out.println("\n---------APP---------");
                 System.out.println("0: exit");
                 System.out.println("1: manage books");
                 System.out.println("2: manage clients");
                 System.out.println("3: buy book");
             }
-            case "Books" -> {
+            case "Books" : {
                 System.out.println("\n---------BOOKS---------");
                 System.out.println("0: back");
                 System.out.println("1: create a new book");
@@ -57,7 +57,7 @@ public class UI {
                 System.out.println("5: show the books with price in a specific range");
                 System.out.println("6: show the list of books");
             }
-            case "Clients" -> {
+            case "Clients" : {
                 System.out.println("\n---------CLIENTS---------");
                 System.out.println("0: back");
                 System.out.println("1: create a new client");
@@ -74,52 +74,52 @@ public class UI {
         String command = scanner.nextLine();
 
         switch (this.commandLayer) {
-            case "App" -> {
+            case "App" : {
                 switch (command) {
-                    case "0" -> {
+                    case "0" : {
                         running = false;
                     }
-                    case "1" -> {
+                    case "1" : {
                         commandLayer = "Books";
                     }
-                    case "2" -> {
+                    case "2" : {
                         commandLayer = "Clients";
                     }
-                    case "3" -> {
+                    case "3" : {
                         System.out.println("Client ID: ");
                         Long clientId = Long.parseLong(scanner.nextLine());
                         System.out.println("Book ID: ");
                         Long bookId = Long.parseLong(scanner.nextLine());
                         this.clientController.buyBook(clientId, bookId);
                     }
-                    default -> {
+                    default : {
                         System.out.println("Wrong command!");
                     }
                 }
             }
-            case "Books" -> {
+            case "Books" : {
                 switch (command) {
-                    case "0" -> {
+                    case "0" : {
                         commandLayer = "App";
                     }
-                    case "1" -> {
+                    case "1" : {
                         this.bookController.addBook(this.readBook());
                     }
-                    case "2" -> {
+                    case "2" : {
                         bookController.updateBook(this.readBook());
                     }
-                    case "3" -> {
+                    case "3" : {
                         System.out.println("Book ID: ");
                         Long id = Long.parseLong(scanner.nextLine());
                         bookController.removeBook(id);
                     }
-                    case "4" -> {
+                    case "4" : {
                         List<Map.Entry<Long, Integer>> bestSellers = this.bookController.bestSellersList(this.clientController.getAllClients());
 
                         for (Map.Entry<Long, Integer> e : bestSellers)
                             System.out.println("Book " + e.getKey() + " was bought " + e.getValue() + " times.");
                     }
-                    case "5" -> {
+                    case "5" : {
                         System.out.println("Minimum price: ");
                         Double minimumPrice = Double.parseDouble(scanner.nextLine());
                         System.out.println("Maximum price: ");
@@ -128,33 +128,33 @@ public class UI {
                             System.out.println(b.toString());
                         });
                     }
-                    case "6" -> {
+                    case "6" : {
                         bookController.getAllBooks().forEach(b -> {
                             System.out.println(b.toString());
                         });
                     }
-                    default -> {
+                    default : {
                         System.out.println("Wrong command!");
                     }
                 }
             }
-            case "Clients" -> {
+            case "Clients" : {
                 switch (command) {
-                    case "0" -> {
+                    case "0" : {
                         commandLayer = "App";
                     }
-                    case "1" -> {
+                    case "1" : {
                         clientController.addClient(this.readClient());
                     }
-                    case "2" -> {
+                    case "2" : {
                         clientController.updateClient(this.readClient());
                     }
-                    case "3" -> {
+                    case "3" : {
                         System.out.println("Client ID: ");
                         Long id = Long.parseLong(scanner.nextLine());
                         clientController.removeClient(id);
                     }
-                    case "4" -> {
+                    case "4" : {
                         List<Map.Entry<Long, Double>> clientsReport = this.clientController.spentMoneyReport(
                                 this.bookController.getAllBooks().stream()
                                         .collect(Collectors.toMap(Book::getId, Book::getPrice)));
@@ -166,13 +166,13 @@ public class UI {
                         );
 
                     }
-                    case "5" -> {
+                    case "5" : {
                         clientController.getAllClients()
                                 .forEach(
                                         System.out::println
                                 );
                     }
-                    default -> {
+                    default : {
                         System.out.println("Wrong command!");
                     }
                 }
