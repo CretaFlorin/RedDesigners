@@ -9,6 +9,8 @@ import domain.validators.PurchaseValidator;
 import repository.FileRepositories.BookFileRepository;
 import repository.FileRepositories.ClientFileRepository;
 import repository.FileRepositories.PurchaseFileRepository;
+import repository.XMLRepositories.BookXMLRepository;
+import repository.XMLRepositories.ClientXMLRepository;
 import service.BookService;
 import service.ClientService;
 import service.PurchaseService;
@@ -30,10 +32,14 @@ public class UI {
     PurchaseValidator purchaseValidator = new PurchaseValidator();
 
     BookFileRepository bookRepository = new BookFileRepository(bookValidator, "src\\main\\files\\books.txt");
-    BookService bookController = new BookService(bookRepository);
     ClientFileRepository clientRepository = new ClientFileRepository(clientValidator, "src\\main\\files\\clients.txt");
-    ClientService clientController = new ClientService(clientRepository);
     PurchaseFileRepository purchaseRepository = new PurchaseFileRepository(purchaseValidator, "src\\main\\files\\purchases.txt");
+
+//    BookXMLRepository bookXMLRepository = new BookXMLRepository(bookValidator, "src\\main\\files\\books.xml");
+    ClientXMLRepository clientXMLRepository = new ClientXMLRepository(clientValidator, "src\\main\\files\\clients.xml");
+
+    BookService bookController = new BookService(bookRepository);
+    ClientService clientController = new ClientService(clientXMLRepository);
     PurchaseService purchaseController = new PurchaseService(purchaseRepository);
 
     public UI() {
@@ -190,6 +196,7 @@ public class UI {
         String author = scanner.nextLine();
         System.out.println("Price: ");
         Double price = Double.parseDouble(scanner.nextLine());
+
         Book book = new Book(name, author, price);
         book.setId(id);
         return book;
