@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ClientFileRepository extends InMemoryRepository<Long, Client> {
-    private final String fileName;
+    protected final String fileName;
 
     public ClientFileRepository(Validator<Client> validator, String fileName) {
         super(validator);
@@ -25,7 +25,7 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
         loadData();
     }
 
-    private void loadData() {
+    public void loadData() {
         Path path = Paths.get(fileName);
 
         try {
@@ -59,7 +59,7 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
         return Optional.empty();
     }
 
-    private void saveToFile(Client entity) {
+    public void saveToFile(Client entity) {
         Path path = Paths.get(fileName);
 
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
