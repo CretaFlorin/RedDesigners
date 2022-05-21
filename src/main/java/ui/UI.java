@@ -35,10 +35,10 @@ public class UI {
     ClientFileRepository clientRepository = new ClientFileRepository(clientValidator, "src\\main\\files\\clients.txt");
     PurchaseFileRepository purchaseRepository = new PurchaseFileRepository(purchaseValidator, "src\\main\\files\\purchases.txt");
 
-//    BookXMLRepository bookXMLRepository = new BookXMLRepository(bookValidator, "src\\main\\files\\books.xml");
+    BookXMLRepository bookXMLRepository = new BookXMLRepository(bookValidator, "src\\main\\files\\books.xml");
     ClientXMLRepository clientXMLRepository = new ClientXMLRepository(clientValidator, "src\\main\\files\\clients.xml");
 
-    BookService bookController = new BookService(bookRepository);
+    BookService bookController = new BookService(bookXMLRepository);
     ClientService clientController = new ClientService(clientXMLRepository);
     PurchaseService purchaseController = new PurchaseService(purchaseRepository);
 
